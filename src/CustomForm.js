@@ -23,43 +23,35 @@ class CustomForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    this.state.name !== "" &&
-    this.state.name.length > 3 &&
-    this.state.name.length <= 25
-      ? this.setState({ isNameValid: true })
-      : this.setState({ isNameValid: false });
+    const clonedState = { ...this.state };
 
-    this.state.email !== "" && emailValidation(this.state.email)
-      ? this.setState({ isEmailValid: true })
-      : this.setState({ isEmailValid: false });
+    clonedState.name !== "" &&
+    clonedState.name.length >= 3 &&
+    clonedState.name.length <= 25
+      ? (clonedState.isNameValid = true)
+      : (clonedState.isNameValid = false);
 
-    this.state.phone !== "" && phoneValidation(this.state.phone)
-      ? this.setState({ isPhoneValid: true })
-      : this.setState({ isPhoneValid: false });
+    clonedState.email !== "" && emailValidation(clonedState.email)
+      ? (clonedState.isEmailValid = true)
+      : (clonedState.isEmailValid = false);
 
-    this.state.url !== "" && urlValidation(this.state.url)
-      ? this.setState({ isUrlValid: true })
-      : this.setState({ isUrlValid: false });
+    clonedState.phone !== "" && phoneValidation(clonedState.phone)
+      ? (clonedState.isPhoneValid = true)
+      : (clonedState.isPhoneValid = false);
+
+    clonedState.url !== "" && urlValidation(clonedState.url)
+      ? (clonedState.isUrlValid = true)
+      : (clonedState.isUrlValid = false);
+
+    this.setState({ ...clonedState });
+
+    clonedState.isNameValid &&
+    clonedState.isEmailValid &&
+    clonedState.isPhoneValid &&
+    clonedState.isUrlValid
+      ? this.props.isFormValid(true)
+      : this.props.isFormValid(false);
   };
-
-  validation = () => {
-    if (
-      this.state.isNameValid &&
-      this.state.isEmailValid &&
-      this.state.isPhoneValid &&
-      this.state.isUrlValid
-    ) {
-      return this.props.isFormValid(true);
-    } else {
-      return this.props.isFormValid(false);
-    }
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state !== prevState) {
-      this.validation();
-    }
-  }
 
   handleOnchange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
